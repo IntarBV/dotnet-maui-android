@@ -8,6 +8,7 @@ ARG BUILD_TOOLS_VERSION
 
 LABEL maintainer=${MAINTAINER}
 ENV TZ=${TZ}
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 # SSH client
 RUN apt-get update && \
