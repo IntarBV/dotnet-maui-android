@@ -9,6 +9,11 @@ ARG BUILD_TOOLS_VERSION
 LABEL maintainer=${MAINTAINER}
 ENV TZ=${TZ}
 
+# SSH client
+RUN apt-get update && \
+  apt-get install -y openssh-client && \
+  rm -rf /var/lib/apt/lists/*
+
 # MONO
 RUN apt-get update && \
   apt-get install -y apt-transport-https gnupg ca-certificates curl && \
