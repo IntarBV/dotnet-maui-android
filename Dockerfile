@@ -1,10 +1,7 @@
 ARG DOTNET_VERSION
-FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} AS dotnet-maui-android
 ARG MAINTAINER
 ARG TZ
-ARG JAVA_VERSION
-ARG ANDROID_API
-ARG BUILD_TOOLS_VERSION
+FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} AS dotnet-maui-android
 
 LABEL maintainer=${MAINTAINER}
 ENV TZ=${TZ}
@@ -27,6 +24,7 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/*
 
 # JAVA
+ARG JAVA_VERSION
 RUN apt-get update && \
   apt-get install -y openjdk-${JAVA_VERSION}-jdk-headless && \
   rm -rf /var/lib/apt/lists/*
@@ -43,7 +41,10 @@ RUN echo "deb http://deb.debian.org/debian bullseye-backports main contrib" > /e
 ENV ANDROID_SDK_ROOT=/usr/lib/android-sdk
 
 # Android toolchain
+ARG ANDROID_API
+ARG BUILD_TOOLS_VERSION
 RUN sdkmanager "platform-tools" "build-tools;${BUILD_TOOLS_VERSION}" "platforms;android-${ANDROID_API}"
 
-# MAUI
+ARG MAUI_VERSION
+# MAUI (We can only install the latest version ATM)
 RUN dotnet workload install maui-android

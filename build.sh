@@ -32,6 +32,7 @@ echo "Maintainer:           ${MAINTAINER}"
 echo "Docker hub username:  ${DOCKER_HUB_USERNAME}"
 echo "Time zone:            ${TZ}"
 echo ".NET version:         ${DOTNET_VERSION}"
+echo "MAUI version:         ${MAUI_VERSION}"
 echo "Java version:         ${JAVA_VERSION}"
 echo "Android API:          ${ANDROID_API}"
 echo "Build tools version:  ${BUILD_TOOLS_VERSION}"
@@ -48,7 +49,7 @@ COMMON_BUILD_ARGS=(
 )
 
 docker build -t "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${COMMON_BUILD_ARGS[@]}" .
-docker tag "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${DOCKER_HUB_USERNAME}/dotnet-maui-android:${DOTNET_VERSION}"
+docker tag "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${DOCKER_HUB_USERNAME}/dotnet-maui-android:${MAUI_VERSION}"
 
 
 for tag in ${EXTRA_TAGS[@]}
@@ -59,7 +60,7 @@ done
 
 if [ -n "${push}" ]
 then
-  for tag in latest ${DOTNET_VERSION} ${EXTRA_TAGS[@]}
+  for tag in ${MAUI_VERSION} ${EXTRA_TAGS[@]} latest
   do
     docker push "${DOCKER_HUB_USERNAME}/dotnet-maui-android:${tag}"
   done
