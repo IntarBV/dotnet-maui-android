@@ -46,5 +46,5 @@ ARG BUILD_TOOLS_VERSION
 RUN sdkmanager "platform-tools" "build-tools;${BUILD_TOOLS_VERSION}" "platforms;android-${ANDROID_API}"
 
 ARG MAUI_VERSION
-# MAUI (We can only install the latest version ATM)
-RUN dotnet workload install maui-android
+# MAUI (We can only install the latest version, the echo is to cache bust if that version changed)
+RUN dotnet workload install maui-android && echo "${MAUI_VERSION}"
