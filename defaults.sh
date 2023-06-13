@@ -19,8 +19,8 @@ then
   EXTRA_TAGS+=($(date +%Y%m%d))
 fi
 
-MAINTAINER=${MAINTAINER:-"Intar BV / Gijsbert “Ghostbird” ter Horst"}
-DOCKER_HUB_USERNAME=${DOCKER_HUB_USERNAME:-"ghostbird"}
+MAINTAINER=${MAINTAINER:-"Conneqt BV"}
+DOCKER_HUB_USERNAME=${DOCKER_HUB_USERNAME:-"conneqthub"}
 TZ=${TZ:-"UTC"}
 
 MAUI_VERSION=${MAUI_VERSION:-"$(dotnet workload list | sed -En 's|^maui-android +([^/]+)/.+$|\1|p')"}
