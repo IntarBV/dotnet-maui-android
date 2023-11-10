@@ -32,10 +32,10 @@ echo "Maintainer:           ${MAINTAINER}"
 echo "Docker hub username:  ${DOCKER_HUB_USERNAME}"
 echo "Time zone:            ${TZ}"
 echo ".NET version:         ${DOTNET_VERSION}"
-echo "MAUI version:         ${MAUI_VERSION}"
 echo "Java version:         ${JAVA_VERSION}"
 echo "Android API:          ${ANDROID_API}"
 echo "Build tools version:  ${BUILD_TOOLS_VERSION}"
+echo "MAUI version:         ${MAUI_VERSION}"
 echo "Extra tags:           ${EXTRA_TAGS[@]}"
 echo "Push after build:     ${push}"
 
@@ -46,6 +46,7 @@ COMMON_BUILD_ARGS=(
   "--build-arg" "JAVA_VERSION=${JAVA_VERSION}"
   "--build-arg" "ANDROID_API=${ANDROID_API}"
   "--build-arg" "BUILD_TOOLS_VERSION=${BUILD_TOOLS_VERSION}"
+  "--build-arg" "MAUI_VERSION=${MAUI_VERSION}"
 )
 
 docker build -t "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${COMMON_BUILD_ARGS[@]}" .
