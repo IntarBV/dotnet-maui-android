@@ -37,7 +37,7 @@ echo "Android API:          ${ANDROID_API}"
 echo "Build tools version:  ${BUILD_TOOLS_VERSION}"
 echo "MAUI version:         ${MAUI_VERSION}"
 echo "Extra tags:           ${EXTRA_TAGS[@]}"
-echo "Push after build:     ${push}"
+echo "Push after build:     ${push:-No}"
 
 COMMON_BUILD_ARGS=(
   "--build-arg" "MAINTAINER=${MAINTAINER}"
@@ -50,7 +50,10 @@ COMMON_BUILD_ARGS=(
 )
 
 docker build -t "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${COMMON_BUILD_ARGS[@]}" .
-docker tag "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${DOCKER_HUB_USERNAME}/dotnet-maui-android:${MAUI_VERSION}"
+if [ -n "${MAUI_VERSION}" ]
+then
+  docker tag "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${DOCKER_HUB_USERNAME}/dotnet-maui-android:${MAUI_VERSION}"
+fi
 
 
 for tag in ${EXTRA_TAGS[@]}

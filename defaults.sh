@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # API levels available and which build tools version corresponds to it.
-declare -A BUILD_TOOLS=( [31]="31.0.0" [32]="32.0.0" [33]="33.0.2" )
+declare -A BUILD_TOOLS=( [31]="31.0.0" [32]="32.0.0" [33]="33.0.2" [34]="34.0.0" )
 
 # Use a .env file to easily override values in your fork
 if [[ -f .env ]]
@@ -23,8 +23,10 @@ MAINTAINER=${MAINTAINER:-"Conneqt BV"}
 DOCKER_HUB_USERNAME=${DOCKER_HUB_USERNAME:-"conneqthub"}
 TZ=${TZ:-"UTC"}
 
+# You must have the most recent maui-android workload installed for this to work.
+# The .NET‌ CLI doesn't show version numbers of workloads that are not already installed. 
 MAUI_VERSION=${MAUI_VERSION:-"$(dotnet workload list | sed -En 's|^maui-android +([^/]+)/.+$|\1|p')"}
-DOTNET_VERSION=${DOTNET_VERSION:-"7.0"}
-JAVA_VERSION=${JAVA_VERSION:-"11"}
-ANDROID_API=${ANDROID_API:-"33"}
+DOTNET_VERSION=${DOTNET_VERSION:-"8.0"}
+JAVA_VERSION=${JAVA_VERSION:-"17"}
+ANDROID_API=${ANDROID_API:-"34"}
 BUILD_TOOLS_VERSION=${BUILD_TOOLS[${ANDROID_API}]}
