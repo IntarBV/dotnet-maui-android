@@ -17,7 +17,7 @@ MAINTAINER=${MAINTAINER:-"Conneqt BV"}
 DOCKER_HUB_USERNAME=${DOCKER_HUB_USERNAME:-"conneqthub"}
 TZ=${TZ:-"UTC"}
 
-# You must have the most recent maui-android workload installed for this to work.
+# You must have the most recent android & maui-android workload installed for this to work.
 # The .NET‌ CLI doesn't show version numbers of workloads that are not already installed.
 MAUI_VERSION=${MAUI_VERSION:-"$(dotnet workload list | sed -En 's|^maui-android\s+([^/]+)/.+$|\1|p')"}
 DOTNET_VERSION=${DOTNET_VERSION:-"8.0"}
