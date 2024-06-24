@@ -43,10 +43,8 @@ ENV JAVA_HOME=/usr/lib/jvm/java-${JAVA_VERSION}-openjdk-amd64/
 # Android SDK Manager
 RUN <<EOF
   set -e
-  echo "deb http://deb.debian.org/debian bullseye-backports main contrib" > /etc/apt/sources.list.d/bullseye-backports.list
-  echo "deb-src http://deb.debian.org/debian bullseye-backports main contrib" >> /etc/apt/sources.list.d/bullseye-backports.list
   apt-get update
-  apt-get install -t bullseye-backports -y sdkmanager
+  apt-get install -y sdkmanager
   rm -rf /var/lib/apt/lists/*
 EOF
 
