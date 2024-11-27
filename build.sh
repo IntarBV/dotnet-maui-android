@@ -2,7 +2,7 @@
 source defaults.sh
 function usage {
   cat << EOF
-Usage: $0 [-h] -p
+Usage: $0 [-h] [-p]
 OPTIONS:
   -h        Show this message
   -p        Push after build
@@ -11,13 +11,14 @@ ERROR CODES:
 EOF
 }
 
-optstring=":h:p"
+optstring="hp"
 unset push
 
 while getopts ${optstring} arg; do
   case ${arg} in
     h)
       usage
+      exit 0
       ;;
     p)
       push=Yes
@@ -28,6 +29,7 @@ while getopts ${optstring} arg; do
       ;;
   esac
 done
+
 echo "Maintainer:           ${MAINTAINER}"
 echo "Docker hub username:  ${DOCKER_HUB_USERNAME}"
 echo "Time zone:            ${TZ}"
