@@ -24,3 +24,29 @@ DOTNET_VERSION=${DOTNET_VERSION:-"9.0"}
 JAVA_VERSION=${JAVA_VERSION:-"17"}
 ANDROID_API=${ANDROID_API:-"$(dotnet workload list | sed -En 's|^android\s+([0-9]+).+$|\1|p')"}
 BUILD_TOOLS_VERSION=${BUILD_TOOLS_VERSION:-$(sdkmanager --list 2>/dev/null | grep -E "build-tools;(${ANDROID_API}\.[0-9]+\.[0-9]+)\s+.+$" | tail -1 | sed -En 's|^.+build-tools;(\S+).+$|\1|p')}
+
+if [[ -z "${MAUI_VERSION}" ]]
+then
+  cat <<EOF
+WARNING: Could not calculate MAUI version to use.
+  Set the MAUI_VERSION variable in the environment,
+  or install the latest dotnet workload android,
+  with your dotnet workload config in manifest mode.
+
+  # dotnet workload config --update-mode manifests
+  # dotnet workload install maui-android
+EOF
+fi
+
+if [[ -z "${ANDROID_API}" ]]
+then
+  cat <<EOF
+WARNING: Could not calculate Android API version to use.
+  Set the ANDROID_API variable in the environment,
+  or install the latest dotnet workload android,
+  with your dotnet workload config in manifest mode.
+
+  # dotnet workload config --update-mode manifests
+  # dotnet workload install android
+EOF
+fi
