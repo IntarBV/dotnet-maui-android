@@ -2,6 +2,8 @@ ARG DOTNET_VERSION=9.0
 ARG MAINTAINER="conneqt B.V."
 ARG TZ="UTC"
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} AS dotnet-maui-android
+ARG MAINTAINER
+ARG TZ
 
 LABEL maintainer=${MAINTAINER}
 ENV TZ=${TZ}
