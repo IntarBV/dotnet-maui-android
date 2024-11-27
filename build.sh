@@ -1,7 +1,7 @@
 #!/bin/bash
 source defaults.sh
 function usage {
-  cat << EOF
+  cat <<EOF
 Usage: $0 [-h] [-p]
 OPTIONS:
   -h        Show this message
@@ -12,39 +12,49 @@ ERROR CODES:
 EOF
 }
 
+function config {
+  cat <<EOF
+────────────────────┬────────────────────
+Maintainer          │ ${MAINTAINER}
+Docker hub username │ ${DOCKER_HUB_USERNAME}
+Time zone           │ ${TZ}
+.NET version        │ ${DOTNET_VERSION}
+Java version        │ ${JAVA_VERSION}
+Android API         │ ${ANDROID_API}
+Build tools version │ ${BUILD_TOOLS_VERSION}
+MAUI version        │ ${MAUI_VERSION}
+Extra tags          │ ${EXTRA_TAGS[@]}
+Push after build    │ ${push:-No}
+────────────────────┴────────────────────
+EOF
+}
+
 optstring="hpd"
 unset push
 unset debug
+unset help
 
 while getopts ${optstring} arg; do
   case ${arg} in
-    h)
-      usage
-      exit 0
-      ;;
-    p)
-      push=Yes
-      ;;
-    d)
-      debug=--debug
-      ;;
-    ?)
-      echo "Invalid option: -${OPTARG}."
-      exit 1
-      ;;
+  h)
+    usage
+    config
+    exit 0
+    ;;
+  p)
+    push=Yes
+    ;;
+  d)
+    debug=--debug
+    ;;
+  ?)
+    echo "Invalid option: -${OPTARG}."
+    exit 1
+    ;;
   esac
 done
 
-echo "Maintainer:           ${MAINTAINER}"
-echo "Docker hub username:  ${DOCKER_HUB_USERNAME}"
-echo "Time zone:            ${TZ}"
-echo ".NET version:         ${DOTNET_VERSION}"
-echo "Java version:         ${JAVA_VERSION}"
-echo "Android API:          ${ANDROID_API}"
-echo "Build tools version:  ${BUILD_TOOLS_VERSION}"
-echo "MAUI version:         ${MAUI_VERSION}"
-echo "Extra tags:           ${EXTRA_TAGS[@]}"
-echo "Push after build:     ${push:-No}"
+config
 
 COMMON_BUILD_ARGS=(
   "--build-arg" "MAINTAINER=${MAINTAINER}"
@@ -57,22 +67,17 @@ COMMON_BUILD_ARGS=(
 )
 
 docker build $debug -t "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${COMMON_BUILD_ARGS[@]}" .
-if [ -n "${MAUI_VERSION}" ]
-then
+if [ -n "${MAUI_VERSION}" ]; then
   docker tag "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${DOCKER_HUB_USERNAME}/dotnet-maui-android:${MAUI_VERSION}"
 fi
 
-
-for tag in ${EXTRA_TAGS[@]}
-do
+for tag in ${EXTRA_TAGS[@]}; do
   echo "Tagging ${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest as ${DOCKER_HUB_USERNAME}/dotnet-maui-android:${tag}"
   docker tag "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${DOCKER_HUB_USERNAME}/dotnet-maui-android:${tag}"
 done
 
-if [ -n "${push}" ]
-then
-  for tag in ${MAUI_VERSION} ${EXTRA_TAGS[@]} latest
-  do
+if [ -n "${push}" ]; then
+  for tag in ${MAUI_VERSION} ${EXTRA_TAGS[@]} latest; do
     docker push "${DOCKER_HUB_USERNAME}/dotnet-maui-android:${tag}"
   done
 fi
