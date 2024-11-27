@@ -5,14 +5,16 @@ function usage {
 Usage: $0 [-h] [-p]
 OPTIONS:
   -h        Show this message
+  -d        Run docker with --debug flag
   -p        Push after build
 ERROR CODES:
   1         Invalid option
 EOF
 }
 
-optstring="hp"
+optstring="hpd"
 unset push
+unset debug
 
 while getopts ${optstring} arg; do
   case ${arg} in
@@ -22,6 +24,9 @@ while getopts ${optstring} arg; do
       ;;
     p)
       push=Yes
+      ;;
+    d)
+      debug=--debug
       ;;
     ?)
       echo "Invalid option: -${OPTARG}."
@@ -51,7 +56,7 @@ COMMON_BUILD_ARGS=(
   "--build-arg" "MAUI_VERSION=${MAUI_VERSION}"
 )
 
-docker build -t "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${COMMON_BUILD_ARGS[@]}" .
+docker build $debug -t "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${COMMON_BUILD_ARGS[@]}" .
 if [ -n "${MAUI_VERSION}" ]
 then
   docker tag "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${DOCKER_HUB_USERNAME}/dotnet-maui-android:${MAUI_VERSION}"
