@@ -9,16 +9,16 @@ LABEL maintainer=${MAINTAINER}
 ENV TZ=${TZ}
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-# SSH client
 RUN <<EOF
+  # SSH client
   set -e
   apt-get update 
   apt-get install -y openssh-client 
   rm -rf /var/lib/apt/lists/*
 EOF
 
-# Mono
 RUN <<EOF
+  # Mono
   set -e
   apt-get update
   apt-get install -y apt-transport-https gnupg ca-certificates curl 
@@ -31,9 +31,9 @@ RUN <<EOF
   rm -rf /var/lib/apt/lists/*
 EOF
 
-# Java
 ARG JAVA_VERSION=17
 RUN <<EOF
+  # Java
   set -e
   apt-get update
   apt-get install -y openjdk-${JAVA_VERSION}-jdk-headless
@@ -42,8 +42,8 @@ EOF
 
 ENV JAVA_HOME=/usr/lib/jvm/java-${JAVA_VERSION}-openjdk-amd64/
 
-# Android SDK Manager
 RUN <<EOF
+  # Android SDK Manager
   set -e
   apt-get update
   apt-get install -y sdkmanager
@@ -52,17 +52,18 @@ EOF
 
 ENV ANDROID_SDK_ROOT=/usr/lib/android-sdk
 
-# Android toolchain
 ARG ANDROID_API=35
 ARG BUILD_TOOLS_VERSION=35.0.0
 RUN <<EOF
+  # Android toolchain
   set -e
   sdkmanager "platform-tools" "build-tools;${BUILD_TOOLS_VERSION}" "platforms;android-${ANDROID_API}"
 EOF
 
+#We can only install the latest version, the ARG is to cache bust if that version changed)
 ARG MAUI_VERSION
-# MAUI (We can only install the latest version, the ARG is to cache bust if that version changed)
 RUN <<EOF
+  # MAUI
   set -e
   dotnet workload install maui-android
 EOF
