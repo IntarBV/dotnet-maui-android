@@ -1,6 +1,6 @@
-ARG DOTNET_VERSION
-ARG MAINTAINER
-ARG TZ
+ARG DOTNET_VERSION=9.0
+ARG MAINTAINER="conneqt B.V."
+ARG TZ="UTC"
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} AS dotnet-maui-android
 
 LABEL maintainer=${MAINTAINER}
@@ -15,7 +15,7 @@ RUN <<EOF
   rm -rf /var/lib/apt/lists/*
 EOF
 
-# MONO
+# Mono
 RUN <<EOF
   set -e
   apt-get update
@@ -29,8 +29,8 @@ RUN <<EOF
   rm -rf /var/lib/apt/lists/*
 EOF
 
-# JAVA
-ARG JAVA_VERSION
+# Java
+ARG JAVA_VERSION=17
 RUN <<EOF
   set -e
   apt-get update
@@ -51,8 +51,8 @@ EOF
 ENV ANDROID_SDK_ROOT=/usr/lib/android-sdk
 
 # Android toolchain
-ARG ANDROID_API
-ARG BUILD_TOOLS_VERSION
+ARG ANDROID_API=35
+ARG BUILD_TOOLS_VERSION=35.0.0
 RUN <<EOF
   set -e
   sdkmanager "platform-tools" "build-tools;${BUILD_TOOLS_VERSION}" "platforms;android-${ANDROID_API}"
@@ -64,3 +64,4 @@ RUN <<EOF
   set -e
   dotnet workload install maui-android
 EOF
+  
