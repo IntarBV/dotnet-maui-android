@@ -60,7 +60,7 @@ RUN <<EOF
   sdkmanager "platform-tools" "build-tools;${BUILD_TOOLS_VERSION}" "platforms;android-${ANDROID_API}"
 EOF
 
-#We can only install the latest version, the ARG is to cache bust if that version changed)
+# We can only install the latest version, the ARG is to cache bust if that version changed
 ARG MAUI_VERSION
 RUN <<EOF
   # MAUI
