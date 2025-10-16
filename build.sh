@@ -1,4 +1,6 @@
 #!/bin/bash
+set -eo pipefail
+
 source defaults.sh
 function usage {
   cat <<EOF
@@ -18,7 +20,7 @@ function config {
 Maintainer          │ ${MAINTAINER}
 Docker hub username │ ${DOCKER_HUB_USERNAME}
 Time zone           │ ${TZ}
-.NET version        │ ${DOTNET_VERSION}
+SDK version         │ ${SDK_VERSION}
 Java version        │ ${JAVA_VERSION}
 Android API         │ ${ANDROID_API}
 Build tools version │ ${BUILD_TOOLS_VERSION}
@@ -60,15 +62,20 @@ COMMON_BUILD_ARGS=(
   "--build-arg" "MAINTAINER=${MAINTAINER}"
   "--build-arg" "TZ=${TZ}"
   "--build-arg" "DOTNET_VERSION=${DOTNET_VERSION}"
+  "--build-arg" "SDK_VERSION=${SDK_VERSION}"
   "--build-arg" "JAVA_VERSION=${JAVA_VERSION}"
   "--build-arg" "ANDROID_API=${ANDROID_API}"
   "--build-arg" "BUILD_TOOLS_VERSION=${BUILD_TOOLS_VERSION}"
   "--build-arg" "MAUI_VERSION=${MAUI_VERSION}"
+  "--build-arg" "SDK_VERSION=${SDK_VERSION}"
 )
 
 docker build $debug -t "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${COMMON_BUILD_ARGS[@]}" .
-if [ -n "${MAUI_VERSION}" ]; then
-  docker tag "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${DOCKER_HUB_USERNAME}/dotnet-maui-android:${MAUI_VERSION}"
+if [ -n "${SDK_VERSION}" ]; then
+  # Tag exact SDK version
+  docker tag "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${DOCKER_HUB_USERNAME}/dotnet-maui-android:${SDK_VERSION}"
+  # Tag .NET SDK version
+  docker tag "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${DOCKER_HUB_USERNAME}/dotnet-maui-android:${DOTNET_VERSION}"
 fi
 
 for tag in ${EXTRA_TAGS[@]}; do
@@ -77,7 +84,7 @@ for tag in ${EXTRA_TAGS[@]}; do
 done
 
 if [ -n "${push}" ]; then
-  for tag in ${MAUI_VERSION} ${EXTRA_TAGS[@]} latest; do
+  for tag in "${SDK_VERSION}" "${DOTNET_VERSION}" ${EXTRA_TAGS[@]} latest; do
     docker push "${DOCKER_HUB_USERNAME}/dotnet-maui-android:${tag}"
   done
 fi

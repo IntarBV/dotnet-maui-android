@@ -17,19 +17,21 @@ MAINTAINER=${MAINTAINER:-"Conneqt BV"}
 DOCKER_HUB_USERNAME=${DOCKER_HUB_USERNAME:-"conneqthub"}
 TZ=${TZ:-"UTC"}
 
-# You must have the most recent android & maui-android workload installed for this to work.
+# You must have the most recent android & maui-android workload installed for automatic defaults to work.
 # The .NET‌ CLI doesn't show version numbers of workloads that are not already installed.
 MAUI_VERSION=${MAUI_VERSION:-"$(dotnet workload list | sed -En 's|^maui-android\s+([^/]+)/.+$|\1|p')"}
-DOTNET_VERSION=${DOTNET_VERSION:-"9.0"}
+SDK_VERSION=${SDK_VERSION:-"$(dotnet workload list | sed -En 's|^maui-android.+SDK ([.0-9]+).+$|\1|p')"}
+DOTNET_VERSION=${DOTNET_VERSION:-"$(<<<$SDK_VERSION cut -d. -f1).$(<<<$SDK_VERSION cut -d. -f2)"}
 JAVA_VERSION=${JAVA_VERSION:-"17"}
 ANDROID_API=${ANDROID_API:-"$(dotnet workload list | sed -En 's|^android\s+([0-9]+).+$|\1|p')"}
+# You must have the Android SDK manager installed and available in the PATH for this to work.
 BUILD_TOOLS_VERSION=${BUILD_TOOLS_VERSION:-$(sdkmanager --list 2>/dev/null | grep -E "build-tools;(${ANDROID_API}\.[0-9]+\.[0-9]+)\s+.+$" | tail -1 | sed -En 's|^.+build-tools;(\S+).+$|\1|p')}
 
-if [[ -z "${MAUI_VERSION}" ]]
+if [[ -z "${SDK_VERSION}" ]]
 then
   cat <<EOF
-WARNING: Could not calculate MAUI version to use.
-  Set the MAUI_VERSION variable in the environment,
+WARNING: Could not calculate SDK version to use.
+  Set the SDK_VERSION variable in the environment,
   or install the latest dotnet workload android,
   with your dotnet workload config in manifest mode.
 
