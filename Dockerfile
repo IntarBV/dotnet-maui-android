@@ -48,6 +48,7 @@ ARG BUILD_TOOLS_VERSION=36.1.0
 RUN <<EOF
   # Android toolchain
   set -e
+  yes | sdkmanager --licenses
   sdkmanager "platform-tools" "build-tools;${BUILD_TOOLS_VERSION}" "platforms;android-${ANDROID_API}"
 EOF
 
