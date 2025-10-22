@@ -1,6 +1,6 @@
 # Docker image .NET MAUI Android
 
-Builds a [docker image](https://hub.docker.com/r/conneqthub/dotnet-maui-android) that allows containerised builds of .NET 9.0 MAUI Android 35 apps.
+Builds a [docker image](https://hub.docker.com/r/conneqthub/dotnet-maui-android) that allows containerised builds of .NET 10.0 MAUI Android 36 apps.
 
 The goal of the resulting image is that you can run `dotnet build` on a MAUI Android workspace without first needing to install additional software.
 
@@ -23,6 +23,6 @@ steps:
     uses: actions/upload-artifact@v4
     with:
       name: aab
-      path: bin/Release/net9.0-android/com.example.app-Signed.aab
+      path: bin/Release/net10.0-android/com.example.app-Signed.aab
       if-no-files-found: error
       retention-days: 1
