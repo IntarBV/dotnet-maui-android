@@ -73,8 +73,10 @@ COMMON_BUILD_ARGS=(
 docker build $debug -t "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${COMMON_BUILD_ARGS[@]}" .
 if [ -n "${SDK_VERSION}" ]; then
   # Tag exact SDK version
+  echo "Tagging ${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest as ${DOCKER_HUB_USERNAME}/dotnet-maui-android:${SDK_VERSION}"
   docker tag "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${DOCKER_HUB_USERNAME}/dotnet-maui-android:${SDK_VERSION}"
   # Tag .NET SDK version
+  echo "Tagging ${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest as ${DOCKER_HUB_USERNAME}/dotnet-maui-android:${DOTNET_VERSION}"
   docker tag "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${DOCKER_HUB_USERNAME}/dotnet-maui-android:${DOTNET_VERSION}"
 fi
 
