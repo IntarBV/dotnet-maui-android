@@ -17,11 +17,12 @@ RUN <<EOF
   rm -rf /var/lib/apt/lists/*
 EOF
 
-ARG JAVA_VERSION=17
+ARG JAVA_VERSION=21
 RUN <<EOF
   # Java
   set -e
   apt-get update
+  apt-get remove -y openjdk-17-*
   apt-get install -y openjdk-${JAVA_VERSION}-jdk-headless
   rm -rf /var/lib/apt/lists/*
 EOF

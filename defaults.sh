@@ -22,7 +22,7 @@ TZ=${TZ:-"UTC"}
 MAUI_VERSION=${MAUI_VERSION:-"$(dotnet workload list | sed -En 's|^maui-android\s+([^/]+)/.+$|\1|p')"}
 SDK_VERSION=${SDK_VERSION:-"$(dotnet workload list | sed -En 's|^maui-android.+SDK ([.0-9]+).+$|\1|p')"}
 DOTNET_VERSION=${DOTNET_VERSION:-"$(<<<$SDK_VERSION cut -d. -f1).$(<<<$SDK_VERSION cut -d. -f2)"}
-JAVA_VERSION=${JAVA_VERSION:-"17"}
+JAVA_VERSION=${JAVA_VERSION:-"21"}
 ANDROID_API=${ANDROID_API:-"$(dotnet workload list | sed -En 's|^android\s+([0-9]+).+$|\1|p')"}
 # You must have the Android SDK manager installed and available in the PATH for this to work.
 BUILD_TOOLS_VERSION=${BUILD_TOOLS_VERSION:-$(sdkmanager --list 2>/dev/null | grep -E "build-tools;(${ANDROID_API}\.[0-9]+\.[0-9]+)\s+.+$" | tail -1 | sed -En 's|^.+build-tools;(\S+).+$|\1|p')}

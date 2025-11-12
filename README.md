@@ -65,7 +65,7 @@ If your current machine is set-up to build .NET‌ MAUI Android apps, and you wa
       ANDROID_API=36
       BUILD_TOOLS_VERSION=36.1.0
       # Optional: This is the default. Lower than 17 probably won't work.
-      # JAVA_VERSION=17
+      # JAVA_VERSION=21
     ```
 
 3. Run `./build.sh`
