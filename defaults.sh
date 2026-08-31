@@ -19,8 +19,8 @@ TZ=${TZ:-"UTC"}
 
 # You must have the most recent android & maui-android workload installed for automatic defaults to work.
 # The .NET‌ CLI doesn't show version numbers of workloads that are not already installed.
-MAUI_VERSION=${MAUI_VERSION:-"$(dotnet workload list | sed -En 's|^maui-android\s+([^/]+)/.+$|\1|p')"}
-SDK_VERSION=${SDK_VERSION:-"$(dotnet workload list | sed -En 's|^maui-android.+SDK ([.0-9]+).+$|\1|p')"}
+MAUI_VERSION=${MAUI_VERSION:-"$(dotnet workload list | sed -En 's|^android\s+([^/]+)/.+$|\1|p')"}
+SDK_VERSION=${SDK_VERSION:-"$(dotnet workload list | sed -En 's|^android.+SDK ([.0-9]+).+$|\1|p')"}
 DOTNET_VERSION=${DOTNET_VERSION:-"$(<<<$SDK_VERSION cut -d. -f1).$(<<<$SDK_VERSION cut -d. -f2)"}
 JAVA_VERSION=${JAVA_VERSION:-"21"}
 ANDROID_API=${ANDROID_API:-"$(dotnet workload list | sed -En 's|^android\s+([0-9]+).+$|\1|p')"}
