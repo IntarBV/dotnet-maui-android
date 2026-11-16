@@ -24,7 +24,6 @@ SDK version         │ ${SDK_VERSION}
 Java version        │ ${JAVA_VERSION}
 Android API         │ ${ANDROID_API}
 Build tools version │ ${BUILD_TOOLS_VERSION}
-MAUI version        │ ${MAUI_VERSION}
 Extra tags          │ ${EXTRA_TAGS[@]}
 Push after build    │ ${push:-No}
 ────────────────────┴────────────────────
@@ -61,13 +60,10 @@ config
 COMMON_BUILD_ARGS=(
   "--build-arg" "MAINTAINER=${MAINTAINER}"
   "--build-arg" "TZ=${TZ}"
-  "--build-arg" "DOTNET_VERSION=${DOTNET_VERSION}"
-  "--build-arg" "SDK_VERSION=${SDK_VERSION}"
+  "--build-arg" "DOTNET_VERSION=${SDK_VERSION}"
   "--build-arg" "JAVA_VERSION=${JAVA_VERSION}"
   "--build-arg" "ANDROID_API=${ANDROID_API}"
   "--build-arg" "BUILD_TOOLS_VERSION=${BUILD_TOOLS_VERSION}"
-  "--build-arg" "MAUI_VERSION=${MAUI_VERSION}"
-  "--build-arg" "SDK_VERSION=${SDK_VERSION}"
 )
 
 docker build $debug -t "${DOCKER_HUB_USERNAME}/dotnet-maui-android:latest" "${COMMON_BUILD_ARGS[@]}" .

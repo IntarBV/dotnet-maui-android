@@ -17,38 +17,17 @@ MAINTAINER=${MAINTAINER:-"Conneqt BV"}
 DOCKER_HUB_USERNAME=${DOCKER_HUB_USERNAME:-"conneqthub"}
 TZ=${TZ:-"UTC"}
 
-# You must have the most recent android & maui-android workload installed for automatic defaults to work.
-# The .NET‌ CLI doesn't show version numbers of workloads that are not already installed.
-MAUI_VERSION=${MAUI_VERSION:-"$(dotnet workload list | sed -En 's|^android\s+([^/]+)/.+$|\1|p')"}
-SDK_VERSION=${SDK_VERSION:-"$(dotnet workload list | sed -En 's|^android.+SDK ([.0-9]+).+$|\1|p')"}
+# Copy the local SDK and Android toolchain when available; otherwise use .NET 11 defaults.
+SDK_VERSION=${SDK_VERSION:-"$(dotnet --version 2>/dev/null || true)"}
+SDK_VERSION=${SDK_VERSION:-"11.0.100"}
 DOTNET_VERSION=${DOTNET_VERSION:-"$(<<<$SDK_VERSION cut -d. -f1).$(<<<$SDK_VERSION cut -d. -f2)"}
-JAVA_VERSION=${JAVA_VERSION:-"21"}
-ANDROID_API=${ANDROID_API:-"$(dotnet workload list | sed -En 's|^android\s+([0-9]+).+$|\1|p')"}
-# You must have the Android SDK manager installed and available in the PATH for this to work.
-BUILD_TOOLS_VERSION=${BUILD_TOOLS_VERSION:-$(sdkmanager --list 2>/dev/null | grep -E "build-tools;(${ANDROID_API}\.[0-9]+\.[0-9]+)\s+.+$" | tail -1 | sed -En 's|^.+build-tools;(\S+).+$|\1|p')}
-
-if [[ -z "${SDK_VERSION}" ]]
-then
-  cat <<EOF
-WARNING: Could not calculate SDK version to use.
-  Set the SDK_VERSION variable in the environment,
-  or install the latest dotnet workload android,
-  with your dotnet workload config in manifest mode.
-
-  # dotnet workload config --update-mode manifests
-  # dotnet workload install maui-android
-EOF
+JAVA_VERSION=${JAVA_VERSION:-"25"}
+ANDROID_API=${ANDROID_API:-"$(dotnet workload list 2>/dev/null | sed -En 's|^android\s+([0-9]+).+$|\1|p' || true)"}
+ANDROID_API=${ANDROID_API:-"37.0"}
+# API 37 and newer use an explicit minor version in SDK package names.
+if [[ $ANDROID_API =~ ^[0-9]+$ && $ANDROID_API -ge 37 ]]; then
+  ANDROID_API+=.0
 fi
-
-if [[ -z "${ANDROID_API}" ]]
-then
-  cat <<EOF
-WARNING: Could not calculate Android API version to use.
-  Set the ANDROID_API variable in the environment,
-  or install the latest dotnet workload android,
-  with your dotnet workload config in manifest mode.
-
-  # dotnet workload config --update-mode manifests
-  # dotnet workload install android
-EOF
-fi
+# sdkmanager is optional on the host. Prefer the highest matching stable build-tools version.
+BUILD_TOOLS_VERSION=${BUILD_TOOLS_VERSION:-$(sdkmanager --list 2>/dev/null | sed -En "s|^[[:space:]]*build-tools;(${ANDROID_API%%.*}\.[0-9]+\.[0-9]+)[[:space:]]+.*$|\1|p" | sort -Vu | tail -1 || true)}
+BUILD_TOOLS_VERSION=${BUILD_TOOLS_VERSION:-"37.0.0"}

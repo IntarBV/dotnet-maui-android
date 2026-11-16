@@ -1,12 +1,12 @@
 # Docker image .NET MAUI Android
 
-Builds a [docker image](https://hub.docker.com/r/conneqthub/dotnet-maui-android) that allows containerised builds of .NET 10.0 MAUI Android 36 apps.
+Builds a [docker image](https://hub.docker.com/r/conneqthub/dotnet-maui-android) that allows containerised builds of .NET 11.0 MAUI Android 37.2 apps.
 
 The goal of the resulting image is that you can run `dotnet build` on a MAUI Android workspace without first needing to install additional software.
 
 ## Basic approach
 
-- Start the docker image. It's recommended to do so from a .NET major.minor version tag, (e.g. `:10.0`) and not `latest`.
+- Start the docker image. It's recommended to do so from a .NET major.minor version tag, (e.g. `:11.0`) and not `latest`.
 - Get the source code you want to build
 - `dotnet build`
 
@@ -23,7 +23,7 @@ steps:
     uses: actions/upload-artifact@v4
     with:
       name: aab
-      path: bin/Release/net10.0-android/com.example.app-Signed.aab
+      path: bin/Release/net11.0-android/com.example.app-Signed.aab
       if-no-files-found: error
       retention-days: 1
 ```
@@ -43,8 +43,8 @@ If your current machine is set-up to build .NET‌ MAUI Android apps, and you wa
 2. Create a .env file where you set:
 
     ```.env
-      MAINTAINER=Your (company) name
-      DOCKER_HUB_USERNAME=Your dockerhub username
+      MAINTAINER="Your (company) name"
+      DOCKER_HUB_USERNAME=your-dockerhub-username
     ```
 
 3. Run `./build.sh`
@@ -57,15 +57,14 @@ If your current machine is set-up to build .NET‌ MAUI Android apps, and you wa
 2. Create a .env file where you set the versions you want:
 
     ```.env
-      MAINTAINER=Your (company) name
-      DOCKER_HUB_USERNAME=Your dockerhub username
+      MAINTAINER="Your (company) name"
+      DOCKER_HUB_USERNAME=your-dockerhub-username
       # Change the versions below to whatever you want.
-      MAUI_VERSION=10.0.0-rc.2.25504.7
-      SDK_VERSION=10.0.100-rc.2
-      ANDROID_API=36
-      BUILD_TOOLS_VERSION=36.1.0
-      # Optional: This is the default. Lower than 17 probably won't work.
-      # JAVA_VERSION=21
+      SDK_VERSION=11.0.100
+      ANDROID_API=37.2
+      BUILD_TOOLS_VERSION=37.0.0
+      # Optional: This is the default. JDK 21 is also supported.
+      # JAVA_VERSION=25
     ```
 
 3. Run `./build.sh`

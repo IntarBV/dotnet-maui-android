@@ -1,4 +1,4 @@
-ARG DOTNET_VERSION=10.0
+ARG DOTNET_VERSION=11.0
 ARG MAINTAINER="conneqt B.V."
 ARG TZ="UTC"
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} AS dotnet-maui-android
@@ -17,7 +17,7 @@ RUN <<EOF
   rm -rf /var/lib/apt/lists/*
 EOF
 
-ARG JAVA_VERSION=21
+ARG JAVA_VERSION=25
 RUN <<EOF
   # Java
   set -e
@@ -39,13 +39,15 @@ RUN <<EOF
   rm -rf /var/lib/apt/lists/*
 EOF
 
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
 # This one is used by the some Android tooling
 ENV ANDROID_SDK_ROOT=/usr/lib/android-sdk
 # This one is used by MAUI builds
 ENV AndroidSdkDirectory=/usr/lib/android-sdk
 
-ARG ANDROID_API=36
-ARG BUILD_TOOLS_VERSION=36.1.0
+ARG ANDROID_API=37.2
+ARG BUILD_TOOLS_VERSION=37.0.0
 RUN <<EOF
   # Android toolchain
   set -e
@@ -53,8 +55,6 @@ RUN <<EOF
   sdkmanager "platform-tools" "build-tools;${BUILD_TOOLS_VERSION}" "platforms;android-${ANDROID_API}"
 EOF
 
-# We can only install the latest version, the ARG is to cache bust if that version changed
-ARG SDK_VERSION
 RUN <<EOF
   # MAUI
   set -e
